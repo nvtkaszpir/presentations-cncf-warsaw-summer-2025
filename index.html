@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<h2>Supercharge Kubernetes Development</h2>
+					<h4>Tools You Need Now</h4>
+					<br/>
+					<p>
+						useful set of tools to make your work faster,
+						save money, and keep your applications running smoothly
+					</p>				
+				</section>
+
+				<section>
+					<h2>About Me</h2>
+					<p>
+						Nobody cares about that :D
+					</p>
+				</section>
+
+				<section>
+					<h2>Agenda</h2>
+					<p>
+						<ul>
+						* Build Locally with Confidence <br/>
+						* Keep Your System Clean Automatically <br/>
+						* Find and Avoid Hardware Problems <br/>
+						* Make Deployments Faster <br/>
+						</ul>
+					</p>
+				</section>
+
+				<section>
+					<section>
+					<h1>Build Locally with Confidence</h1>
+					</section>
+
+					<section>
+					<p>
+						<img src="https://lima-vm.io/images/logo.svg" />
+						<br/>
+
+						<a href="https://lima-vm.io">lima-vm.io</a>
+						<br/>
+						<br/>
+						You can put it in the same basket as <a href="https://developer.hashicorp.com/vagrant">Vagrant</a>
+						<br/>
+						<br/>
+						Lima is a CNCF sandbox project
+						<br/>
+						<img src="https://lima-vm.io/images/cncf-color-bg.svg" style="width: 25%;" />
+					</p>
+					</section>
+
+					<section data-background-color="#EAFF80">
+					<h3 style="color: green;">Pros</h3>
+					<ul>
+					* Linux virtual machines, with a focus on running containers - integration with k3s or k8s<br/>
+					<br/>
+					* better than KinD - real vms / no docker-in-docker limitations / helps with networking or disks<br/>
+					<br/>
+					* different OS images / different architectures - can create multi-node setup<br/>
+					<br/>
+					* you can mount git repo from host to guest - ideal for gitops approach<br/>
+					<br/>
+					
+					</ul>
+					</section>
+
+					<section data-background-color="#FFf580">
+					<h2 style="color: red;">Cons</h2>
+					<ul>
+					* focuses on container based apps<br/>
+					<br/>
+					* a lot of things are not well documented in the config files unless you read the source code<br/>
+					<br/>
+					* doing some FIPS specific things still needs a bit scripting or manual work<br/>
+					<br/>
+				
+					</ul>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+					<h1>Keep Your System Clean Automatically</h1>
+					</section>
+
+					<section>
+						<h1> Kube-janitor</h1>
+					<p>
+						<br/>
+
+						<a href="https://codeberg.org/hjacobs/kube-janitor">hjacobs/kube-janitor</a>
+						<br/>
+						<br/>
+
+						Kubernetes Janitor cleans up (deletes) Kubernetes resources on <br/>
+						a configured TTL (time to live)<br/>
+						or<br/>
+						a configured expiry date (absolute timestamp).
+
+					</p>
+					</section>
+
+					<section data-background-color="#80EAFF">
+					<h3 style="color: white;">Pros</h3>
+					<ul>
+					* annotations to the resources such as<br/>janitor/ttl: 3h<br/>or<br/>janitor/expires: YYYY-MM-DD<br/>
+					<br/>
+					* can be limited to specific resources<br/>
+					<br/>
+					* can define rules file to periodically check more complex conditions<br/>
+					<br/>
+					* excellent for automatic wiping CI builds<br/>
+					<br/>
+					
+					</ul>
+					</section>
+
+					<section data-background-color="#F4A460">
+					<h2 style="color: red;">Cons</h2>
+					<ul>
+					* make sure to adjust RBAC what to delete, certain resources are cluster scoped<br/>
+					<br/>
+					* rules files use JMESPath<br/>
+					<br/>
+					* not actively developed<br/>
+					<br/>
+				
+					</ul>
+					</section>
+
+					<section>
+					<p>
+						<a href="https://github.com/kubernetes-sigs/descheduler">kubernetes-sigs/descheduler</a>
+					
+						<img src="https://github.com/kubernetes-sigs/descheduler/raw/master/assets/logo/descheduler-stacked-color.png" />
+
+					</p>
+					</section>
+
+					<section data-background-color="#0AFFBA">
+					<h3 style="color: black;">Pros</h3>
+					<ul>
+					* force rebalance node load<br/>
+					* remove duplicates / inter pod anti affinity / node affinity or taints / tps<br/>
+					* remove pods with too many restarts / running for too long / failed
+					<br/>
+					<img src="https://raw.githubusercontent.com/kubernetes-sigs/descheduler/refs/heads/master/strategies_diagram.png" />
+					
+					</ul>
+					</section>
+
+					<section data-background-color="#FF0A50">
+					<h2 style="color: white;">Cons</h2>
+					<ul>
+					* forces to review PDB / evition policies <br/>
+					<br/>
+					* start with small changes - namespace limited<br/>
+					<br/>
+					* watch out for triggering cluster-autoscaler node removals<br/>
+					<br/>
+				
+					</ul>
+					</section>
+
+
+				</section>
+
+				<section>
+					<section>
+					<h1>Find and Avoid Hardware Problems</h1>
+					</section>
+					<section>
+
+					<img src="static/IMG_20131018_192730-fs8.png" />
+					</section>
+
+					<section>
+					<p>
+						<a href="https://github.com/kubernetes/node-problem-detector">kubernetes/node-problem-detector</a>
+						<br/>
+					</p>
+					</section>
+
+					<section data-background-color="#0AFFBA">
+					<h3 style="color: black;">Pros</h3>
+					<ul>
+					* has some generic software/hardware checks working out of the box <br/>
+					* nowadays preinstalled on managed k8s<br/>
+					* you can define your own detections<br/>
+					* automatic node evictions due node taints by conditions (1.31)<br/>
+					</ul>
+					</section>
+
+					<section data-background-color="#FF0A50">
+					<h2 style="color: white;">Cons</h2>
+					<ul>
+					* only specific conditions are triggering evictions<br/>
+					<br/>
+					* writing your own checks may require custom system images<br/>
+					<br/>
+					* for evictions based on custom conditions you need to look for another tools<br/>
+					<br/>
+					* some cloud providers add custom conditions that work only in their cloud<br/>
+					<br/>
+				
+					</ul>
+					</section>
+
+					<section>
+					<p>
+						<img src="https://github.com/cloudflare/sciuro/raw/master/img/sciuro.png"/>
+						<br/>
+						<a href="https://github.com/cloudflare/sciuro">cloudflare/sciuro</a>
+						<br/>
+					</p>
+					</section>
+
+					<section >
+					<h3 style="color: black;">Pros</h3>
+					<ul>
+					Sciuro is a bridge between Alertmanager or Prometheus and Kubernetes to sync alerts as Node Conditions.
+					<br/>
+					<br/>
+					See <a href="https://blog.cloudflare.com/automatic-remediation-of-kubernetes-nodes/"> Cloudflare Blog</a>
+					</ul>
+					</section>
+
+					<section data-background-size="contain" data-background-image="https://cf-assets.www.cloudflare.com/zkvhlag99gkb/2TF20JXIsXxWApKN9yyEcy/fe4d2244e860fe8e0c1477e06ae24c30/image4-3.png">
+					</section>
+
+					<section >
+					<h2 style="color: black;">Cons</h2>
+					<ul>
+					* may be too exotic due to used dependencies (draino/bazel/cluster-api..)<br/>
+					<br/>
+					* focused on Prometheus / Alertmanager integration<br/>
+					<br/>
+
+					</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+					<h1>Make Deployments Faster</h1>
+					</section>
+
+					<section>
+						<img src="https://zotregistry.dev/v2.1.7/assets/images/logo.svg" style="width: 50%;"/>
+						<br/>
+						Zot Registry - OCI-native container image registry,
+						simplified ... now compatible with docker
+					</section>
+
+					<section >
+					<img src="https://raw.githubusercontent.com/project-zot/project-zot.github.io/refs/heads/main/docs/assets/images/504568.jpg"/>
+					</section>
+
+					<section >
+					<h3 style="color: black;">Pros</h3>
+					<ul>
+					* OCI-native container image registry / helm charts<br/>
+					* very easy to setup - single binary / config<br/>
+					* automatic scanning of the CVE via trivy<br/>
+					* can be used as registry mirrors<br/>
+					<br/>
+
+					</ul>
+
+					</section>
+
+					<section >
+					<h2 style="color: black;">Cons</h2>
+					<ul>
+					* some more advanced features are on the roadmap<br/>
+					* not as advanced as for example Harbor<br/>
+					<br/>
+
+					</ul>
+					</section>
+
+					<section>
+						<img src="https://spegel.dev/images/logo-transparent.svg" style="width: 33%;"/>
+						<br/>
+						<a href="https://spegel.dev/">spegel.dev</a>
+						<br/>
+						Stateless cluster local OCI registry mirror
+						<br/>
+						Speed up container pulls and minimize downtime with a stateless peer-to-peer 
+						OCI registry mirror for efficient image distribution
+					</section>
+
+					<section data-background-size="contain" data-background-image="https://spegel.dev/images/overview.gif">
+					</section>
+
+					<section data-background-color="#d5e8d4">
+					<h3 style="color: black;">Pros</h3>
+					<ul>
+					* mimizes number of fetched images from the upstream<br/>
+					* local cluster cahcing makes large image distrubution faster (ML)<br/>
+					* stateless<br/>
+					* can use Zot for mirror<br/>
+					</ul>
+					</section>
+
+					<section data-background-color="#f8cecc">
+					<h2 style="color: black;">Cons</h2>
+					<ul>
+					* P2P network which requires additional network adjustments<br/>
+					* latest tag will cause issues (always has been)<br/>
+					* make sure to give nodes enough storage<br/>
+					<br/>
+
+					</ul>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+					<h1>Q & A</h1>
+					</section>
+					<section>
+					<h1>Thank You!</h1>
+					<p>
+						<img src="static/qrcode.png">
+					</p>
+					</section>
+				</section>
+
+			</div>
+		</div>
+
+
+
+
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
